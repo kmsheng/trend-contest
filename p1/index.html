@@ -1,85 +1,81 @@
 <!DOCTYPE html>
 <html>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-<style>
-.multiple_select {
- margin: 0 auto;
-}
+  <head>
+    <script src="https://unpkg.com/react@15/dist/react.js"></script>
+    <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>
 
-.multiple_select > div {
- display: inline-block;
- vertical-align: bottom;
-}
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <style>
+    .multiple_select {
+     margin: 0 auto;
+    }
 
-.multiple_select .available,
-  .multiple_select .selected {
- position: relative;
- width: 42%;
-}
+    .multiple_select > div {
+     display: inline-block;
+     vertical-align: bottom;
+    }
 
-.multiple_select .available > input,
-    .multiple_select .available > label,
-    .multiple_select .selected > input,
-    .multiple_select .selected > label {
- margin: 0 0 5px;
-}
+    .multiple_select .available,
+      .multiple_select .selected {
+     position: relative;
+     width: 42%;
+    }
 
-.multiple_select .available > select,
-    .multiple_select .selected > select {
- display: block;
- height: 200px;
- padding: 0;
- width: 100%;
-}
+    .multiple_select .available > input,
+        .multiple_select .available > label,
+        .multiple_select .selected > input,
+        .multiple_select .selected > label {
+     margin: 0 0 5px;
+    }
 
-.multiple_select .available > .lu-filter-input,
-    .multiple_select .selected > .lu-filter-input {
- padding-right: 24px;
- width: 100%;
-}
+    .multiple_select .available > select,
+        .multiple_select .selected > select {
+     display: block;
+     height: 200px;
+     padding: 0;
+     width: 100%;
+    }
 
-.multiple_select .available > .lu-close,
-    .multiple_select .selected > .lu-close {
- position: absolute;
- right: 10px;
- top: 9px;
-}
+    .multiple_select .available > .lu-filter-input,
+        .multiple_select .selected > .lu-filter-input {
+     padding-right: 24px;
+     width: 100%;
+    }
 
-.multiple_select .transit_btns {
- display: inline-block;
- height: 200px;
- max-width: 60px;
- min-width: 45px;
- padding-top: 30px;
- width: 7%;
- text-align: center;
-}
+    .multiple_select .available > .lu-close,
+        .multiple_select .selected > .lu-close {
+     position: absolute;
+     right: 10px;
+     top: 9px;
+    }
 
-.multiple_select .transit_btns > button {
- display: block;
- margin: 5px auto;
- min-width: 0;
- padding: 4px 8px;
-}
-</style>
+    .multiple_select .transit_btns {
+     display: inline-block;
+     height: 200px;
+     max-width: 60px;
+     min-width: 45px;
+     padding-top: 30px;
+     width: 7%;
+     text-align: center;
+    }
+
+    .multiple_select .transit_btns > button {
+     display: block;
+     margin: 5px auto;
+     min-width: 0;
+     padding: 4px 8px;
+    }
+    </style>
+  </head>
 <body>
 
-<div ng-app="myApp" ng-controller="myCtrl">
-<multi-select
-                ng-model="mselector.leftArr"
-                available=" mselector.rightArr"
-                left-label="ng-model"
-                right-label="available"
-                maximum-available = "20"
-                display-attr="username"
-                placeholder="filer left box items" >
-</multi-select>
+<div id="root"></div>
 
-</div>
+<script type="text/jsx">
 
-<script>
 var app = angular.module('myApp', []);
 app.controller('myCtrl', function($scope) {
        $scope.mselector = {
@@ -90,7 +86,6 @@ app.controller('myCtrl', function($scope) {
             ],
             rightArr:[]
         }
-
 })
 .directive('multiSelect', ['$q', function ($q) {
         return {
@@ -331,7 +326,35 @@ app.controller('myCtrl', function($scope) {
         }
         return filtered;
     };
-  });;
+  });
+
+  var html = ['<div ng-app="myApp" ng-controller="myCtrl">',
+    '<multi-select ',
+      'ng-model="mselector.leftArr"',
+      'available=" mselector.rightArr"',
+      'left-label="ng-model"',
+      'right-label="available"',
+      'maximum-available = "20"',
+      'display-attr="username"',
+      'placeholder="filer left box items" >',
+    '</multi-select>',
+  '</div>'].join('');
+
+  var MultiSelect = React.createClass({
+
+    componentDidMount: function() {
+      angular.bootstrap(this.refs.myDiv, ['myApp']);
+    },
+
+    render: function() {
+
+      return (
+        <div ref="myDiv" dangerouslySetInnerHTML={{__html: html}} />
+      );
+    }
+  });
+
+  ReactDOM.render(<MultiSelect />, document.getElementById('root'));
 
 </script>
 
