@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<style>
+.multiple_select {
+ margin: 0 auto;
+}
+
+.multiple_select > div {
+ display: inline-block;
+ vertical-align: bottom;
+}
+
+.multiple_select .available,
+  .multiple_select .selected {
+ position: relative;
+ width: 42%;
+}
+
+.multiple_select .available > input,
+    .multiple_select .available > label,
+    .multiple_select .selected > input,
+    .multiple_select .selected > label {
+ margin: 0 0 5px;
+}
+
+.multiple_select .available > select,
+    .multiple_select .selected > select {
+ display: block;
+ height: 200px;
+ padding: 0;
+ width: 100%;
+}
+
+.multiple_select .available > .lu-filter-input,
+    .multiple_select .selected > .lu-filter-input {
+ padding-right: 24px;
+ width: 100%;
+}
+
+.multiple_select .available > .lu-close,
+    .multiple_select .selected > .lu-close {
+ position: absolute;
+ right: 10px;
+ top: 9px;
+}
+
+.multiple_select .transit_btns {
+ display: inline-block;
+ height: 200px;
+ max-width: 60px;
+ min-width: 45px;
+ padding-top: 30px;
+ width: 7%;
+ text-align: center;
+}
+
+.multiple_select .transit_btns > button {
+ display: block;
+ margin: 5px auto;
+ min-width: 0;
+ padding: 4px 8px;
+}
+</style>
+<body>
+
+<div ng-app="myApp" ng-controller="myCtrl">
+<multi-select
+                ng-model="mselector.leftArr"
+                available=" mselector.rightArr"
+                left-label="ng-model"
+                right-label="available"
+                maximum-available = "20"
+                display-attr="username"
+                placeholder="filer left box items" >
+</multi-select>
+
+</div>
+
+<script>
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope) {
+       $scope.mselector = {
+            leftArr:[
+                {username:'Trend'},
+                {username:'Micro'},
+                {username:'JSDC'}
+            ],
+            rightArr:[]
+        }
+
+})
+.directive('multiSelect', ['$q', function ($q) {
+        return {
+            template: [
+                '<div class="multiple_select">',
+                    '<div class="available form-inline">',
+                        '<input class="form-control lu-filter-input" ng-change="getFilterData(searchText)" ng-model="searchText" placeholder="{{placeholder}}">',
+                        '<a class="lu-close" ng-click="clearFilterText()" ng-show="showResetIcon()"></a></input><br/>',
+                        '<label>{{ leftLabel }}</label>',
+                        '<select class="form-control" ng-model="selected.current" multiple ng-options="e as e[displayAttr] for e in model |objectFilterBy:displayAttr:searchText" ng-dblclick="doubleClickCallback(\'available\')"></select>',
+                    '</div>',
+                    '<fieldset class="transit_btns" ng-disabled="disableTransit">',
+                        '<button class="btn btn-default btn-sm" type="button" ng-click="addAll()"  ng-disabled="available.length == 0">',
+                            '<i class="glyphicon glyphicon-backward"></i>',
+                        '</button>',
+                        '<button class="btn btn-default btn-sm" type="button" ng-click="add()" ng-disabled="selected.available.length == 0">',
+                            '<i class="glyphicon glyphicon-chevron-left"></i>',
+                        '</button>',
+                        '<button class="btn btn-default btn-sm" type="button" ng-click="remove()" ng-disabled="selected.current.length == 0">',
+                            '<i class="glyphicon glyphicon-chevron-right"></i>',
+                        '</button>',
+                        '<button class="btn btn-default btn-sm" type="button" ng-click="removeAll()" ng-disabled="model.length == 0">',
+                            '<i class="glyphicon glyphicon-forward"></i>',
+                        '</button>',
+                    '</fieldset>',
+                    '<div class="selected">',
+                        '<label>{{ rightLabel }} ({{ available.length }}{{ maximumLength }})</label>',
+                        '<select class="form-control" ng-model="selected.available" multiple ng-options="e as e[displayAttr] for e in available" ng-dblclick="doubleClickCallback(\'selected\')"></select>',
+                    '</div>',
+                    '<div class="transit_btns">',
+                        '<button class="btn btn-default btn-sm" type="button" ng-click="customOrder(true)"  ng-disabled="selected.available.length == 0">',
+                            '<i class="glyphicon glyphicon-chevron-up"></i>',
+                        '</button>',
+                        '<button class="btn btn-default btn-sm" type="button" ng-click="customOrder(false)"  ng-disabled="selected.available.length == 0">',
+                            '<i class="glyphicon glyphicon-chevron-down"></i>',
+                        '</button>',
+                    '</div>',
+                '</div>'
+            ].join(''),
+            restrict: 'E',
+            require: 'ngModel',
+            scope: {
+                disableTransit: "=",
+                leftLabel: "@",
+                rightLabel: "@",
+                displayAttr: "@",
+                available: "=",
+                model: "=ngModel",
+                placeholder: '@',
+                maximumAvailable: '@'
+            },
+            link: function(scope, elm, attrs) {
+                scope.searchText = '';
+                scope.selected = {
+                    current: [],
+                    available: []
+                };
+                scope.queryData = {
+                    current: [],
+                    available: []
+                };
+                scope.clearFilterText = function(){
+                    scope.searchText = '';
+                };
+                scope.showResetIcon = function(){
+                    if(scope.searchText === undefined){
+                        return false;
+                    }
+                    if(scope.searchText.length === 0){
+                        return false;
+                    }else{
+                        return true;
+                    }
+                };
+                scope.doubleClickCallback = function(_type) {
+                    if (_type === 'available') {
+                        scope.remove();
+                    } else if (_type === 'selected') {
+                        scope.add();
+                    }
+                };
+                var deWatcher;
+                /* Handles cases where scope data hasn't been initialized yet */
+                var dataLoading = function(scopeAttr) {
+                    var loading = $q.defer();
+                    if (scope[scopeAttr]) {
+                        loading.resolve(scope[scopeAttr]);
+                    } else {
+                         deWatcher = scope.$watch(scopeAttr, function(newValue, oldValue) {
+                            if (newValue !== undefined){
+                                loading.resolve(newValue);
+                            }
+                        });
+                    }
+                    return loading.promise;
+                };
+
+                /* Filters out items in original that are also in toFilter. Compares by reference. */
+                var filterOut = function(original, toFilter) {
+                    var filtered = [];
+                    angular.forEach(original, function(entity) {
+                        var match = false;
+                        for(var i = 0; i < toFilter.length; i++) {
+                            if(toFilter[i][attrs.displayAttr] == entity[attrs.displayAttr]) {
+                                match = true;
+                                break;
+                            }
+                        }
+                        if(!match) {
+                            filtered.push(entity);
+                        }
+                    });
+                    return filtered;
+                };
+                scope.refreshAvailable = function(resetSetSelected, firstLoading) {
+                    scope.getFilterData(scope.searchText);
+                    scope.available = filterOut(scope.available, scope.model);
+
+                    scope.model = _.sortBy(scope.model, function(obj){
+                        return obj[scope.displayAttr];
+                    });
+                    if (resetSetSelected){
+                        scope.selected.available = [];
+                        scope.selected.current = [];
+                    }
+
+                };
+                scope.addAll = function(){
+                    if (scope.disableTransit) { return; }
+
+                    if(typeof(scope.searchText) === 'undefined' || scope.searchText === '' ){
+                        scope.queryData.current = scope.model;
+                    }
+                    scope.queryData.available = scope.available;
+
+                    scope.model = scope.model.concat(scope.queryData.available);
+                    scope.available = filterOut(scope.available, scope.queryData.available);
+
+                    scope.queryData.current = scope.queryData.current.concat(scope.queryData.available);
+                    scope.queryData.available = [];
+
+                    scope.refreshAvailable(true, false);
+                };
+                scope.add = function() {
+                    if (scope.disableTransit) { return; }
+
+                    scope.model = scope.model.concat(scope.selected.available);
+                    scope.available = filterOut(scope.available, scope.selected.available);
+
+                    scope.queryData.current = scope.queryData.current.concat(scope.selected.available);
+                    scope.queryData.available = filterOut(scope.queryData.available, scope.selected.available);
+
+                    scope.refreshAvailable(true, false);
+                };
+                scope.remove = function() {
+                    if (scope.disableTransit) { return; }
+
+                    scope.model = filterOut(scope.model, scope.selected.current);
+                    scope.available = scope.available.concat(scope.selected.current);
+
+                    scope.queryData.current = filterOut(scope.queryData.current, scope.selected.current);
+                    scope.queryData.available = scope.queryData.available.concat(scope.selected.current);
+
+                    scope.refreshAvailable(true, false);
+                };
+                scope.removeAll = function() {
+                    if (scope.disableTransit) { return; }
+
+                    if(typeof(scope.searchText) === 'undefined' || scope.searchText === '' ){
+                        scope.queryData.current = scope.model;
+                        scope.queryData.available = scope.available;
+                    }
+                    scope.available = scope.available.concat(scope.queryData.current);
+                    scope.model = filterOut(scope.model, scope.queryData.current);
+
+                    scope.queryData.available = scope.queryData.available.concat(scope.queryData.current);
+                    scope.queryData.current = [];
+
+                    scope.refreshAvailable(true, false);
+
+                };
+                scope.getFilterData = function(query){
+                    scope.queryData.current = _.chain(scope.model).filter(
+                        function(x){
+                            return x[scope.displayAttr].toLowerCase().indexOf(query.toLowerCase()) > -1;
+                        }).value();
+                };
+
+                scope.customOrder = function(isOrderUp) {
+                    var index = scope.available.indexOf(scope.selected.available[0]);
+                    scope.available.splice(index, scope.selected.available.length);
+                    if (isOrderUp) {
+                        if(index !== 0 ){
+                            index = index - 1;
+                        }
+                    } else {
+                        if (index < scope.available.length) {
+                            index = index + 1;
+                        }
+                    }
+                    scope.available.splice(index, 0, scope.selected.available);
+                    scope.available = _.flatten(scope.available);
+                    scope.refreshAvailable(false, false);
+                };
+                if (scope.maximumAvailable) {
+                    scope.maximumLength = '/' + scope.maximumAvailable;
+                } else {
+                    scope.maximumLength = '';
+                }
+
+                $q
+                    .all([dataLoading("model"), dataLoading("available")])
+                    .then(
+                        function(results) {
+                            scope.refreshAvailable(true, true);
+                        }
+                    );
+                scope.$on('$destroy', function(){
+                    if(deWatcher !== undefined){
+                        deWatcher();
+                    }
+                    elm.remove();
+                });
+            }
+        };
+    }])
+.filter('objectFilterBy', function () {
+    return function (items,field,searchText) {
+        var filtered = [];
+        if(searchText === '' || searchText === undefined){
+            filtered = items;
+        }else{
+            angular.forEach(items, function(item) {
+                if(item[field].toLowerCase().indexOf(searchText.toLowerCase()) > -1){
+                    filtered.push(item);
+                }
+            });
+        }
+        return filtered;
+    };
+  });;
+
+</script>
+
+</body>
+</html>
+
