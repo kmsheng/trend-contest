@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>p3</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Faker/3.1.0/faker.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.3/lodash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+</head>
+<body>
+  <div class="well well-lg">
+    Please re-write code to implement following features:
+    <ul>
+      <li>Pagination table by vertical scrolling</li>
+      <li>Implement CTRL+F function to search TrendMicro employees</li>
+      <li>Add highlight on scroll bar for #2 result</li>
+    </ul>
+  </div>
+  <form class="form-inline pull-right">
+    <div class="form-group">
+      <label for="search-input">Search by company : </label>
+      <input type="text" class="form-control" id="search-input" placeholder="Company name">
+    </div>
+  </form>
+  <table id="user-table" class="table table-bordered">
+    <thead>
+      <tr class="info">
+        <th>#</th>
+        <th>Avatar</th>
+        <th>Name</th>
+        <th>Company</th>
+        <th>City</th>
+        <th>BOD</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <input type="text" id="searchbar" />
+  <script src="script.js"></script>
+</body>
+</html>

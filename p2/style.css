@@ -1,0 +1,61 @@
+.container {
+  padding: 5px;
+  position: absolute;
+  z-index: 1000;
+}
+.content {
+  background-color: #000;
+  border: 1px solid #fff;
+  color: #fff;
+  display: block;
+  padding: 8px 12px;
+  word-break: break-all;
+}
+.arrow {
+  border-style: dashed;
+  border-width: 6px;
+  height: 0;
+  width: 0;
+  position: absolute;
+}
+.top {
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-bottom: 0;
+  border-top-color: #000;
+  border-top-style: solid;
+  bottom: 0;
+  left: 50%;
+  margin-left: -6px;
+}
+.right {
+  border-bottom-color: transparent;
+  border-top-color: transparent;
+  border-left: 0;
+  border-right-color: #000;
+  border-right-style: solid;
+  left: 0;
+  margin-top: -6px;
+  top: 50%;
+}
+.bottom {
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: #000;
+  border-bottom-style: solid;
+  border-top: 0;
+  left: 50%;
+  margin-left: -6px;
+  top: 0;
+}
+.left {
+  border-bottom-color: transparent;
+  border-top-color: transparent;
+  border-left-color: #000;
+  border-left-style: solid;
+  border-right: 0;
+  margin-top: -6px;
+  right: 0;
+  top: 50%;
+}
+

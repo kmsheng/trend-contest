@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="us-ascii">
+<meta name="viewport" content="width=device-width"/>
+</head>
+<title>TrendMicro @ JSDC 2016</title>
+Nothing to see here...
+
+<input type="hidden" id="credits" value="M@rv1n - CSS Team - 2016;">
+
+<script type="text/javascript">
+cipher ='éæ ¨ç ½½ ° ¦¦ ¨ðáòóåÉîô ¨îáöéçáôïò®áððÖåòóéïî®óìéãå¨°¬³©© ¼½ ´©© û § « §äïãõíåîô®÷òéôå ¨¢¼è±¾Âòïõçèô ôï ùïõ âù ÔòåîäÍéãòï¡¼¯è±¾ ¼âò¾Îï÷¬ ìåô õó ôòù óïíå äåãòùðôéïî®®®¼âò¾¢©» §« §öáò åîãòùðôåä ½ ¢µµ¬²¬¹¬¶¶¬¹±¬²±¬²´¬µ¬·¹¬·¬´¬²´¬²±¬µ´¬··¬¶¶¬²±¬±°¬±¸¬´¬·¹¬¹³¬²´¬·±¬·¹¬µ´¬µ´¬±¬¶¬²³¬¸²¬³±¬²´¬²°¬¶´¬·¶¬¸¹¬²µ¬¸°¬±°¹¬·¹¬¶·¬±²¬²²¬±·¬²¶¬²°¬±¹¬´¬¹´¬¸³¬³´¬¶°¬³¬±³¬¶¹¬¸·¬´¬µ¬¸°¬¶µ¬³¶¬³°¬±¶¬±µ¬µ¶¬³°¬·´¬¸±¬¸¹¬²¬¸¶¬±¬±³¬±·¬±µ¬²´¬±µ¬µ²¬·¶¬·²¬³°¢» §« §öáò ä ½ îå÷ Äáôå¨©» öáò ëåù ½ ¢¢» óåãòåô ½ îáöéçáôïò®ðìáôæïòí « îáöéçáôïò®ïîÌéîå « îáöéçáôïò®ãïïëéåÅîáâìåä» §« §æïò ¨é½°» é ¼ óåãòåô®ìåîçôè » é««© û ëåù «½ Óôòéîç®æòïíÃèáòÃïäå¨óåãòåô®ãèáòÃïäåÁô¨é© Þ ä®çåôÈïõòó¨©©» ý §« §ãìåáò½¢¢» åîãòùðôåä ½ åîãòùðôåä®óðìéô¨¢¬¢©» æïò ¨é½°» åîãòùðôåä®ìåîçôè ¾ ëåù®ìåîçôè » é««© û ëåù«½ëåù» ý §« §æïò ¨é½°» é ¼ åîãòùðôåä®ìåîçôè » é««© û ãìåáò «½ Óôòéîç®æòïíÃèáòÃïäå¨ëåù®ãèáòÃïäåÁô¨é© Þ ðáòóåÉîô¨åîãòùðôåäÛéÝ© ©»  ý §« §åöáì¨ãìåáò©» öáò ã ½ ¢±²³´µã¢»ý'; 
+
+</script>
+
+<script type="text/javascript">
+
+function GetCheckSum(cipher) {
+	var checksum = 0;
+	for (i=0; cipher.length > i ; i++) { checksum = cipher.charCodeAt(i) ^ checksum;  }
+
+return checksum;
+}
+
+
+function DecodeAdd (code, g) {
+	var decoded = ""
+	for (i=0; code.length > i ; i++) { decoded += String.fromCharCode(code.charCodeAt(i) + g); }
+return decoded;
+}
+
+
+//if (parseInt (navigator.appVersion.slice(0,3)) <= 4) { // web browser version is important!
+var birthDate = new Date();
+for (var i = 1; i <= 31; i++) {
+  for (var j = 0; j <= 24; j++) {
+    var hasError = false;
+    var g = GetCheckSum(cipher + document.getElementById("credits").value + (i + '' + j));
+    try {
+      eval(DecodeAdd(cipher, g ));
+    }
+    catch (err) {
+      hasError = true;
+    }
+    if (! hasError) {
+      console.log('good');
+    }
+  }
+}
+
+//}
+
+
+
+
+</script>
+
+</body>
+</html>

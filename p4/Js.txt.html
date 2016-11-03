@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="us-ascii">
+<meta name="viewport" content="width=device-width"/>
+</head>
+<title>TrendMicro @ JSDC 2016</title>
+Nothing to see here...
+
+<input type="hidden" id="credits" value="M@rv1n - CSS Team - 2016;">
+
+<script type="text/javascript">
+cipher ='ιζ ¨η ½½ ° ¦¦ ¨παςσεΙξτ ¨ξαφιηατος®αππΦεςσιοξ®σμιγε¨°¬³©© Ό½ ΄©© ϋ § ‰« §δογυνεξτ®χςιτε ¨ΆΌθ±ΎΒςουηθτ το ωου βω ΤςεξδΝιγςο΅Ό―θ±Ύ ΌβςΎΞοχ¬ μετ υσ τςω σονε δεγςωπτιοξ®®®ΌβςΎΆ©» §‰« §φας εξγςωπτεδ ½ Άµµ¬²¬Ή¬¶¶¬Ή±¬²±¬²΄¬µ¬·Ή¬·¬΄¬²΄¬²±¬µ΄¬··¬¶¶¬²±¬±°¬±Έ¬΄¬·Ή¬Ή³¬²΄¬·±¬·Ή¬µ΄¬µ΄¬±¬¶¬²³¬Έ²¬³±¬²΄¬²°¬¶΄¬·¶¬ΈΉ¬²µ¬Έ°¬±°Ή¬·Ή¬¶·¬±²¬²²¬±·¬²¶¬²°¬±Ή¬΄¬Ή΄¬Έ³¬³΄¬¶°¬³¬±³¬¶Ή¬Έ·¬΄¬µ¬Έ°¬¶µ¬³¶¬³°¬±¶¬±µ¬µ¶¬³°¬·΄¬Έ±¬ΈΉ¬²¬Έ¶¬±¬±³¬±·¬±µ¬²΄¬±µ¬µ²¬·¶¬·²¬³°Ά» §‰« §φας δ ½ ξεχ Δατε¨©» ‰φας λεω ½ ΆΆ» σεγςετ ½ ξαφιηατος®πματζοςν « ξαφιηατος®οξΜιξε « ξαφιηατος®γοολιεΕξαβμεδ» §‰« §ζος ¨ι½°» ι Ό σεγςετ®μεξητθ » ι««© ϋ λεω «½ Στςιξη®ζςονΓθαςΓοδε¨σεγςετ®γθαςΓοδεΑτ¨ι© ή δ®ηετΘουςσ¨©©» ύ §‰« §γμεας½ΆΆ» εξγςωπτεδ ½ εξγςωπτεδ®σπμιτ¨Ά¬Ά©» ζος ¨ι½°» εξγςωπτεδ®μεξητθ Ύ λεω®μεξητθ » ι««© ϋ λεω«½λεω» ύ §‰« §ζος ¨ι½°» ι Ό εξγςωπτεδ®μεξητθ » ι««© ϋ γμεας «½ Στςιξη®ζςονΓθαςΓοδε¨λεω®γθαςΓοδεΑτ¨ι© ή παςσεΙξτ¨εξγςωπτεδΫιέ© ©»  ύ §‰« §εφαμ¨γμεας©» φας γ ½ Ά±²³΄µγΆ»ύ'; 
+
+</script>
+
+<script type="text/javascript">
+
+function GetCheckSum(cipher) {
+	var checksum = 0;
+	for (i=0; cipher.length > i ; i++) { checksum = cipher.charCodeAt(i) ^ checksum;  }
+
+return checksum;
+}
+
+
+function DecodeAdd (code, g) {
+	var decoded = ""
+	for (i=0; code.length > i ; i++) { decoded += String.fromCharCode(code.charCodeAt(i) + g); }
+return decoded;
+}
+
+
+if (parseInt (navigator.appVersion.slice(0,3)) <= 4) { // web browser version is important!
+var birthDate = new Date();
+var g = GetCheckSum(cipher + document.getElementById("credits").value + birthDate.getDate());
+eval(DecodeAdd(cipher, g ));
+
+}
+
+
+
+
+</script>
+
+</body>
+</html>
